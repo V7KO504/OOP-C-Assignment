@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+private:
+    string name;
+    int regNumber;
+    float grade;
+
+public:
+    Student(string n, int r, float g) : name(n), regNumber(r), grade(g) {}
+
+    void display() {
+        cout << "Name: " << name << ", Registration Number: " << regNumber << ", Grade: " << grade << endl;
+    }
+};
+
+class StudentManagement {
+private:
+    Student* students[100];
+    int count;
+
+public:
+    StudentManagement() : count(0) {}
+
+    void addStudent(string name, int regNumber, float grade) {
+        students[count++] = new Student(name, regNumber, grade);
+    }
+
+    void displayStudents() {
+        for (int i = 0; i < count; i++) {
+            students[i]->display();
+        }
+    }
+};
+
+int main() {
+    StudentManagement sm;
+
+    sm.addStudent("John Legend", 101, 92.5);
+    sm.addStudent("Jane Rono", 102, 88.0);
+    sm.addStudent("Viola Davis", 103, 95.5);
+    sm.addStudent("Michael Jackson", 104, 89.0);
+
+    sm.displayStudents();
+
+    return 0;
+}
