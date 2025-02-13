@@ -2,7 +2,13 @@
 #include <string>
 using namespace std;
 
-class Student {
+class Individual {
+public:
+    virtual void display() const = 0;
+    virtual ~Individual() {}
+};
+
+class Student : public Individual {
 private:
     string name;
     int regNumber;
@@ -11,26 +17,36 @@ private:
 public:
     Student(string n, int r, float g) : name(n), regNumber(r), grade(g) {}
 
-    void display() {
+    void display() const override {
         cout << "Name: " << name << ", Registration Number: " << regNumber << ", Grade: " << grade << endl;
     }
 };
 
 class StudentManagement {
 private:
-    Student* students[100];
+    Individual* students[100];
     int count;
 
 public:
     StudentManagement() : count(0) {}
 
-    void addStudent(string name, int regNumber, float grade) {
-        students[count++] = new Student(name, regNumber, grade);
+    void addStudent(Individual* student) {
+        if (count < 100) {
+            students[count++] = student;
+        } else {
+            cout << "Cannot add more students." << endl;
+        }
     }
 
-    void displayStudents() {
+    void displayStudents() const {
         for (int i = 0; i < count; i++) {
             students[i]->display();
+        }
+    }
+
+    ~StudentManagement() {
+        for (int i = 0; i < count; i++) {
+            delete students[i];
         }
     }
 };
@@ -38,10 +54,11 @@ public:
 int main() {
     StudentManagement sm;
 
-    sm.addStudent("John Legend", 101, 92.5);
-    sm.addStudent("Jane Rono", 102, 88.0);
-    sm.addStudent("Viola Davis", 103, 95.5);
-    sm.addStudent("Michael Jackson", 104, 89.0);
+    sm.addStudent(new Student("Alice", 101, 90.0));
+    sm.addStudent(new Student("Bob", 102, 85.0));
+    sm.addStudent(new Student("Charlie", 103, 88.0));
+    sm.addStudent(new Student("Diana", 104, 92.0));
+    sm.addStudent(new Student("Eve", 105, 87.0));
 
     sm.displayStudents();
 
